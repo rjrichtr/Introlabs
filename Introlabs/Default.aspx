@@ -1,5 +1,29 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Introlabs.Master" CodeBehind="Default.aspx.vb" Inherits="Introlabs._Default" EnableEventValidation="false" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
+    <script type="text/javascript">
+
+        function selectElementContents(el) {
+            var body = document.body, range, sel;
+            if (document.createRange && window.getSelection) {
+                range = document.createRange();
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                try {
+                    range.selectNodeContents(el);
+                    sel.addRange(range);
+                } catch (e) {
+                    range.selectNode(el);
+                    sel.addRange(range);
+                }
+            } else if (body.createTextRange) {
+                range = body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+            }
+        }
+    </script>
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
@@ -217,7 +241,7 @@
     <div class="row">
         <div class="col-md-12 form-inline">
 
-            <div class="input-group mb-3 mr-4">
+            <div class="input-group mb-3 mr-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Room:</span>
                 </div>
@@ -228,11 +252,11 @@
                     SelectCommand="SELECT DISTINCT [room] FROM [room_sections]"></asp:SqlDataSource>
             </div>
 
-            <div class="input-group mb-3 mr-4">
+            <div class="input-group mb-3 mr-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Section:</span>
                 </div>
-                <asp:DropDownList ID="Section_ddl" runat="server" CssClass="form-control" DataSourceID="Section_sds" DataTextField="section" DataValueField="section" AppendDataBoundItems="true" AutoPostBack="True">
+                <asp:DropDownList ID="Section_ddl" runat="server" CssClass="form-control" DataSourceID="Section_sds" DataTextField="section" DataValueField="section" AppendDataBoundItems="true">
                     <asp:ListItem>Please Select</asp:ListItem>
                 </asp:DropDownList>
                 <asp:SqlDataSource ID="Section_sds" runat="server" ConnectionString="<%$ ConnectionStrings:MM_OCS_SQL_STRING %>"
@@ -243,11 +267,11 @@
                 </asp:SqlDataSource>
             </div>
 
-            <div class="input-group mb-3 mr-4">
+            <div class="input-group mb-3 mr-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Lab:</span>
                 </div>
-                <asp:DropDownList ID="DropDownList3" runat="server" CssClass="form-control" AutoPostBack="True">
+                <asp:DropDownList ID="DropDownList3" runat="server" CssClass="form-control">
                     <asp:ListItem>Please Select</asp:ListItem>
                     <asp:ListItem>1</asp:ListItem>
                     <asp:ListItem>2</asp:ListItem>
@@ -264,39 +288,34 @@
                 </asp:DropDownList>
             </div>
 
-            <div class="input-group mb-3 mr-4">
+            <div class="input-group mb-3 mr-2">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Chart:</span>
                 </div>
-                <asp:DropDownList ID="DropDownList4" runat="server" CssClass="form-control" AutoPostBack="True">
+                <asp:DropDownList ID="DropDownList4" runat="server" CssClass="form-control">
                     <asp:ListItem>Please Select</asp:ListItem>
                     <asp:ListItem>1</asp:ListItem>
                     <asp:ListItem>2</asp:ListItem>
                 </asp:DropDownList>
             </div>
 
-            <asp:LinkButton ID="Export_lnkbtn" runat="server" CssClass="btn btn-outline-info mb-3" Visible="False"><i class="fa fa-download"></i>&nbsp;Download Report to Excel</asp:LinkButton>
+            <asp:LinkButton ID="LinkButton3" CssClass="btn btn-primary mb-3 mr-2" runat="server">Go</asp:LinkButton>
 
+            <asp:LinkButton ID="Export_lnkbtn" runat="server" CssClass="btn btn-outline-info mb-3 mr-2" Visible="False"><i class="fa fa-download"></i>&nbsp;Download Report to Excel</asp:LinkButton>
+
+            <asp:PlaceHolder ID="Copy_plhdr" runat="server" Visible="False">
+                <input type="button" class="btn btn-outline-info mb-3" value="Select Grid to Copy" onclick="selectElementContents(document.getElementById('ContentPlaceHolder1_GridView1'));">
+            </asp:PlaceHolder>
         </div>
     </div>
 
     <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1"
-        CssClass="table table-bordered table-striped table-sm bottom-buffer mt-3" GridLines="None" Font-Size="10pt" AllowSorting="True" PageSize="20">
+        CssClass="table table-bordered table-striped table-sm bottom-buffer mt-3" GridLines="None" Font-Size="10pt" AllowSorting="True" PageSize="50">
         <Columns>
-            <asp:TemplateField ShowHeader="False">
-                <EditItemTemplate>
-                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Update" CssClass="btn btn-primary btn-sm"></asp:LinkButton>
-                    &nbsp;<asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" CssClass="btn btn-secondary btn-sm"></asp:LinkButton>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit" CssClass="btn btn-primary btn-sm"></asp:LinkButton>
-                    &nbsp;<asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Delete" CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('You are about to delete this record!');" Text="Delete"></asp:LinkButton>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:BoundField DataField="room" HeaderText="Room" SortExpression="room" ReadOnly="True" />
-            <asp:BoundField DataField="section" HeaderText="Section" SortExpression="section" ReadOnly="True" />
+            <asp:BoundField DataField="room" HeaderText="Room" SortExpression="room" ReadOnly="True" Visible="False" />
+            <asp:BoundField DataField="section" HeaderText="Section" SortExpression="section" ReadOnly="True" Visible="False" />
             <asp:BoundField DataField="station" HeaderText="Station" SortExpression="station" ReadOnly="True" />
-            <asp:TemplateField HeaderText="Lab" SortExpression="lab">
+            <asp:TemplateField HeaderText="Lab" SortExpression="lab" Visible="False">
                 <EditItemTemplate>
                     <asp:DropDownList ID="labedit_ddl" runat="server" CssClass="form-control" SelectedValue='<%# Bind("lab") %>' Width="125">
                         <asp:ListItem>Please Select</asp:ListItem>
@@ -319,7 +338,7 @@
                     <asp:Label ID="Label1" runat="server" Text='<%# Bind("lab") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Chart" SortExpression="chart">
+            <asp:TemplateField HeaderText="Chart" SortExpression="chart" Visible="False">
                 <EditItemTemplate>
                     <asp:DropDownList ID="chartedit_ddl" runat="server" CssClass="form-control" SelectedValue='<%# Bind("chart") %>' Width="125">
                         <asp:ListItem>Please Select</asp:ListItem>
@@ -412,14 +431,24 @@
                     <asp:Label ID="Label12" runat="server" Text='<%# Bind("number10") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
+            <asp:TemplateField ShowHeader="False">
+                <EditItemTemplate>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Update" CssClass="btn btn-primary btn-sm mr-2"></asp:LinkButton>
+                    &nbsp;<asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" CssClass="btn btn-secondary btn-sm"></asp:LinkButton>
+                </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit" CssClass="btn btn-primary btn-sm mr-2"></asp:LinkButton>
+                    &nbsp;<asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Delete" CssClass="btn btn-danger btn-sm" OnClientClick="return confirm('You are about to delete this record!');" Text="Delete" Visible="False"></asp:LinkButton>
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
     </asp:GridView>
 
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:MM_OCS_SQL_STRING %>"
         DeleteCommand="DELETE FROM [lab_charts] WHERE [ID] = @ID"
         InsertCommand="INSERT INTO [lab_charts] ([room], [section], [station], [lab], [chart], [number1], [number2], [number3], [number4], [number5], [number6], [number7], [number8], [number9], [number10]) VALUES (@room, @section, @station, @lab, @chart, @number1, @number2, @number3, @number4, @number5, @number6, @number7, @number8, @number9, @number10)"
-        SelectCommand="SELECT ID, datestamp, RTRIM(room) AS room, RTRIM(section) AS section, RTRIM(station) AS station, RTRIM(lab) AS lab, RTRIM(chart) AS chart, number1, number2, number3, number4, number5, number6, number7, number8, number9, number10 FROM lab_charts WHERE (@room = 'Please Select' OR @room IS NULL OR room = @room) AND (@section = 'Please Select' OR @section IS NULL OR section = @section) AND (@lab = 'Please Select' OR @lab IS NULL OR lab = @lab) AND (@chart = 'Please Select' OR @chart IS NULL OR chart = @chart)"
-        UpdateCommand="UPDATE [lab_charts] SET [lab] = @lab, [chart] = @chart, [number1] = @number1, [number2] = @number2, [number3] = @number3, [number4] = @number4, [number5] = @number5, [number6] = @number6, [number7] = @number7, [number8] = @number8, [number9] = @number9, [number10] = @number10 WHERE [ID] = @ID">
+        SelectCommand="SELECT ID, datestamp, RTRIM(room) AS room, RTRIM(section) AS section, RTRIM(station) AS station, RTRIM(lab) AS lab, RTRIM(chart) AS chart, number1, number2, number3, number4, number5, number6, number7, number8, number9, number10 FROM lab_charts WHERE (room = @room) AND (section = @section) AND (lab = @lab) AND (chart = @chart)"
+        UpdateCommand="UPDATE [lab_charts] SET [number1] = @number1, [number2] = @number2, [number3] = @number3, [number4] = @number4, [number5] = @number5, [number6] = @number6, [number7] = @number7, [number8] = @number8, [number9] = @number9, [number10] = @number10 WHERE [ID] = @ID">
         <DeleteParameters>
             <asp:Parameter Name="ID" Type="Int32" />
         </DeleteParameters>
@@ -447,9 +476,7 @@
             <asp:ControlParameter ControlID="DropDownList4" Name="chart" PropertyName="SelectedValue" Type="String" />
         </SelectParameters>
         <UpdateParameters>
-            <asp:Parameter Name="lab" Type="String" />
-            <asp:Parameter Name="chart" Type="String" />
-            <asp:Parameter Name="number1" Type="String" />
+            <asp:Parameter Name="number1" Type="Double" />
             <asp:Parameter Name="number2" Type="Double" />
             <asp:Parameter Name="number3" Type="Double" />
             <asp:Parameter Name="number4" Type="Double" />

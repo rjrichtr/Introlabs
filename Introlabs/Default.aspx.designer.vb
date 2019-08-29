@@ -95,6 +95,15 @@ Partial Public Class _Default
     Protected WithEvents DropDownList4 As Global.System.Web.UI.WebControls.DropDownList
     
     '''<summary>
+    '''LinkButton3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LinkButton3 As Global.System.Web.UI.WebControls.LinkButton
+    
+    '''<summary>
     '''Export_lnkbtn control.
     '''</summary>
     '''<remarks>
@@ -102,6 +111,15 @@ Partial Public Class _Default
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents Export_lnkbtn As Global.System.Web.UI.WebControls.LinkButton
+    
+    '''<summary>
+    '''Copy_plhdr control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Copy_plhdr As Global.System.Web.UI.WebControls.PlaceHolder
     
     '''<summary>
     '''GridView1 control.

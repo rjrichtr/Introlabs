@@ -63,8 +63,10 @@ Public Class _Default
 
         If e.AffectedRows > 0 Then
             Export_lnkbtn.Visible = True
+            Copy_plhdr.Visible = True
         Else
             Export_lnkbtn.Visible = False
+            Copy_plhdr.Visible = False
         End If
 
     End Sub
